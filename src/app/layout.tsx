@@ -1,0 +1,91 @@
+import type { Metadata } from "next"
+import { Inter, Space_Grotesk } from "next/font/google"
+import "./globals.css"
+import { cn } from "@/lib/utils"
+import { siteConfig } from "@/lib/brand"
+import { getSiteUrl } from "@/lib/site-url"
+import { ThemeProvider } from "@/components/theme-provider"
+import { ReduxProvider } from "@/store/ReduxProvider"
+
+const siteUrl = getSiteUrl()
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+})
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
+})
+
+export const metadata: Metadata = {
+  title: {
+    default: siteConfig.title,
+    template: `%s · ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  applicationName: siteConfig.name,
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: "/",
+  },
+  keywords: [
+    "ICare MC",
+    "pregnancy",
+    "maternal health",
+    "child care",
+    "Ethiopia",
+    "Amharic",
+    "Oromo",
+  ],
+  icons: {
+    icon: [{ url: "/logo-icon.png" }],
+    apple: [{ url: "/logo-icon.png" }],
+  },
+  openGraph: {
+    type: "website",
+    locale: siteConfig.locale,
+    url: siteUrl,
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+  },
+  other: {
+    "theme-color": siteConfig.themeColor,
+  },
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("h-full antialiased", inter.variable, spaceGrotesk.variable)}
+    >
+      <head />
+      <body className="flex min-h-full flex-col font-sans">
+        <ReduxProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </ReduxProvider>
+      </body>
+    </html>
+  )
+}
