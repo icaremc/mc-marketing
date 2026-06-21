@@ -15,15 +15,6 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }]
   },
-  async redirects() {
-    return [
-      { source: "/dashboard/:path*", destination: "/", permanent: false },
-      { source: "/:userId/success", destination: "/", permanent: false },
-      { source: "/:userId/cancel", destination: "/", permanent: false },
-      { source: "/payments/:path*", destination: "/", permanent: false },
-      { source: "/start", destination: "/", permanent: false },
-    ]
-  },
 }
 
 export default nextConfig

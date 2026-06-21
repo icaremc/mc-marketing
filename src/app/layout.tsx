@@ -3,11 +3,7 @@ import { Inter, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/lib/brand"
-import { getSiteUrl } from "@/lib/site-url"
 import { ThemeProvider } from "@/components/theme-provider"
-import { ReduxProvider } from "@/store/ReduxProvider"
-
-const siteUrl = getSiteUrl()
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +23,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(siteConfig.siteUrl),
   alternates: {
     canonical: "/",
   },
@@ -47,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: siteConfig.locale,
-    url: siteUrl,
+    url: siteConfig.siteUrl,
     siteName: siteConfig.name,
     title: siteConfig.title,
     description: siteConfig.description,
@@ -75,16 +71,14 @@ export default function RootLayout({
     >
       <head />
       <body className="flex min-h-full flex-col font-sans">
-        <ReduxProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </ReduxProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
