@@ -34,7 +34,7 @@ export function HowItWorks() {
 					How it works
 				</h2>
 				<p className="mt-3 text-pretty text-muted-foreground sm:text-lg">
-					A simple flow designed for mothers and caregivers — from first download
+					A simple flow designed for mothers and caregivers, from first download
 					to booking your next appointment.
 				</p>
 			</Reveal>

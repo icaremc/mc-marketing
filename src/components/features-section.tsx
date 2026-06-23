@@ -26,7 +26,7 @@ const featureCards = [
 	},
 	{
 		title: "Multilingual support",
-		desc: "Use ICare MC in English, Amharic, or Oromo — built for families across Ethiopia.",
+		desc: "Use ICare MC in English, Amharic, or Oromo, built for families across Ethiopia.",
 		Icon: LanguagesIcon,
 	},
 ] as const

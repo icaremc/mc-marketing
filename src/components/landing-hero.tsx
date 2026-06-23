@@ -40,7 +40,7 @@ export function LandingHero() {
 								</h1>
 								<p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
 									{siteConfig.name} helps mothers and caregivers track pregnancy
-									weeks, daily health tips, appointments, and doctor visits — in
+									weeks, daily health tips, appointments, and doctor visits in
 									the languages you use every day.
 								</p>
 							</Reveal>

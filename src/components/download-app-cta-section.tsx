@@ -17,7 +17,7 @@ export function DownloadAppCta() {
 								</h2>
 								<p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
 									Download the app, set your pregnancy dates, and get guidance
-									that grows with you — from early weeks to booking care.
+									that grows with you, from early weeks to booking care.
 								</p>
 								<StoreBadges className="mt-8" />
 							</div>

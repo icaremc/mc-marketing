@@ -64,9 +64,22 @@ export function SiteFooter() {
 					</div>
 				</div>
 
-				<p className="mt-10 border-t border-border pt-6 text-sm text-muted-foreground">
-					© {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
-				</p>
+				<div className="mt-10 flex flex-col gap-2 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+					<p>
+						© {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+					</p>
+					<p>
+						Developed by{" "}
+						<a
+							href="https://www.zulu-tech.com"
+							target="_blank"
+							rel="noreferrer"
+							className="text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+						>
+							Zulu Tech
+						</a>
+					</p>
+				</div>
 			</div>
 		</footer>
 	)
