@@ -86,6 +86,7 @@ export function LandingHero() {
 										height={56}
 										priority
 										aria-hidden
+										className="rounded-2xl"
 									/>
 									<div>
 										<p className="font-heading text-xl font-semibold">

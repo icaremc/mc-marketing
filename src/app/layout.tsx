@@ -36,10 +36,6 @@ export const metadata: Metadata = {
     "Amharic",
     "Oromo",
   ],
-  icons: {
-    icon: [{ url: "/logo-icon.png" }],
-    apple: [{ url: "/logo-icon.png" }],
-  },
   openGraph: {
     type: "website",
     locale: siteConfig.locale,

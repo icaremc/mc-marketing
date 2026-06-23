@@ -47,8 +47,9 @@ export function SiteFooter() {
 
 					<div className="flex flex-col gap-2">
 						<p className="text-sm font-medium">Company</p>
-						<FooterLink href="/terms">Terms</FooterLink>
-						<FooterLink href="/privacy">Privacy</FooterLink>
+						<FooterLink href="/terms">Terms of Service</FooterLink>
+						<FooterLink href="/privacy">Privacy Policy</FooterLink>
+						<FooterLink href="/medical-disclaimer">Medical disclaimer</FooterLink>
 						<FooterLink href="/contact">Contact</FooterLink>
 					</div>
 

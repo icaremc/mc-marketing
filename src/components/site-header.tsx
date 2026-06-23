@@ -23,6 +23,7 @@ export function SiteHeader({ variant = "page" }: { variant?: HeaderVariant }) {
             width={40}
             height={40}
             priority
+            className="rounded-xl"
           />
           <span className="font-heading text-lg text-foreground sm:text-xl">
             {siteConfig.name}

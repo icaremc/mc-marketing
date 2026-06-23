@@ -6,12 +6,15 @@ export const siteConfig = {
   title: "ICare MC | Mother & child health",
   description:
     "Track pregnancy weeks, daily health tips, doctor appointments, and milestones for mothers and caregivers. Available in English, Amharic, and Oromo.",
-  siteUrl: "https://www.icare-mc.com",
+  siteUrl: "https://mc-marketing-website.vercel.app",
   locale: "en_US",
   themeColor: "#4CAF8A",
   supportEmail: "support@icare-mc.com",
   supportPhone: "0912323811",
+  privacyPolicyUrl: "https://mc-marketing-website.vercel.app/privacy",
+  termsOfServiceUrl: "https://mc-marketing-website.vercel.app/terms",
+  medicalDisclaimerUrl: "https://mc-marketing-website.vercel.app/medical-disclaimer",
   playStoreUrl:
-    "https://play.google.com/store/apps/details?id=com.example.icare_mc",
+    "https://play.google.com/store/apps/details?id=com.icaremc.app",
   appStoreUrl: "https://apps.apple.com/app/icare-mc",
 } as const

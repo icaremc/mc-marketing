@@ -24,11 +24,11 @@ export function DownloadAppCta() {
 
 							<div className="mx-auto flex items-center justify-center lg:mx-0">
 								<Image
-									src="/logo.png"
+									src="/logo-icon.png"
 									alt={`${siteConfig.name} app logo`}
 									width={220}
 									height={220}
-									className="h-auto w-[180px] drop-shadow-lg sm:w-[220px]"
+									className="h-auto w-[180px] rounded-[2.5rem] drop-shadow-lg sm:w-[220px]"
 								/>
 							</div>
 						</div>
