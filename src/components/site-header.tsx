@@ -43,6 +43,9 @@ export function SiteHeader({ variant = "page" }: { variant?: HeaderVariant }) {
           <Link href={`${hashPrefix}#faq`} className={navClassName}>
             FAQ
           </Link>
+          <Link href="/about" className={navClassName}>
+            About
+          </Link>
           <Link href="/contact" className={navClassName}>
             Contact
           </Link>

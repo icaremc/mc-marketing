@@ -9,6 +9,7 @@ export type LegalSection = {
 
 const support = siteConfig.supportEmail
 const appName = siteConfig.name
+const doctorAppName = "iCare Doctors"
 
 export const privacyPolicySections: LegalSection[] = [
   {
@@ -86,6 +87,85 @@ We do not sell your personal information. We do not use your data for third-part
   },
 ]
 
+export const doctorPrivacyPolicySections: LegalSection[] = [
+  {
+    title: "Privacy Policy",
+    body: `Effective date: ${legalEffectiveDate}
+
+This Privacy Policy explains how ${doctorAppName} ("we", "us") collects, uses, shares, and protects information when healthcare providers use the ${doctorAppName} provider application and related services. ${doctorAppName} is the companion app for doctors and clinicians who offer care through the ${appName} platform.`,
+  },
+  {
+    title: "1. Information we collect",
+    body: `Account information: name, email address, phone number, and password (stored securely by our authentication provider).
+
+Professional profile: medical specialty, medical license number, hospital or clinic affiliation, years of experience, professional biography, consultation services and fees, availability schedule, and profile photo.
+
+Verification documents: images of your medical license and degree or qualification certificates that you upload so administrators can verify your account before approval.
+
+Payout and financial information: bank account holder name, bank name, account number, wallet balance, earnings, and withdrawal/payout requests. We do not store full payment card numbers.
+
+Patient interaction data: appointments booked with you (including patient name and phone number provided for the booking), appointment status, and chat messages between you and patients through the app.
+
+Device data: push notification token (FCM), device type, and app settings such as theme stored locally.
+
+Technical data: IP address and standard server logs when you use cloud features (via Supabase and our backend).`,
+  },
+  {
+    title: "2. How we use information",
+    body: `We use your information to:
+• create, verify, and manage your provider account;
+• display your profile, specialty, availability, and fees to patients;
+• enable appointment booking and secure messaging with patients;
+• calculate earnings and process withdrawal/payout requests to your bank account;
+• send notifications about appointments, messages, and account status;
+• review verification documents for account approval;
+• improve app security and performance;
+• comply with legal obligations.`,
+  },
+  {
+    title: "3. How we share information",
+    body: `We share information only as needed to operate the Service:
+
+Patients: your professional profile, specialty, availability, consultation fees, and chat messages with patients who book or message you.
+
+Administrators: your verification documents and profile information are reviewed by ${appName} administrators to approve and manage your account.
+
+Service providers: Supabase (database and authentication), Firebase Cloud Messaging (push notifications), Chapa and our payment partners (processing payouts), and hosting providers that process data on our behalf under contractual safeguards.
+
+Legal requirements: when required by law, court order, or to protect rights, safety, and security.
+
+We do not sell your personal information. We do not use your data for third-party advertising.`,
+  },
+  {
+    title: "4. Data storage and security",
+    body: `Account, profile, verification, and financial data are stored in secure cloud infrastructure. Local preferences may be stored on your device. We use industry-standard measures including encryption in transit (HTTPS/TLS) and access controls. No method of transmission or storage is 100% secure.`,
+  },
+  {
+    title: "5. Data retention",
+    body: `We retain your information while your account is active and as needed to provide the Service, settle payouts, resolve disputes, and meet legal and financial record-keeping obligations. You may request account deletion by contacting ${support}.`,
+  },
+  {
+    title: "6. Your choices and rights",
+    body: `You can update your profile, services, availability, and bank details in the app, and manage notification preferences in Settings. Depending on applicable law, you may request access, correction, or deletion of your personal data by emailing ${support}. Some financial records may be retained where required by law even after account deletion.`,
+  },
+  {
+    title: "7. Patient data responsibilities",
+    body: `When you access patient information through the Service to provide care, you are responsible for handling it confidentially and in accordance with applicable medical privacy and professional obligations. You must not use patient information for any purpose other than delivering care through the platform.`,
+  },
+  {
+    title: "8. International transfers",
+    body: `Your data may be processed in countries where our service providers operate. We take steps to ensure appropriate safeguards when data is transferred internationally.`,
+  },
+  {
+    title: "9. Changes to this policy",
+    body: `We may update this Privacy Policy. We will post the updated policy on this website and in the app, and revise the effective date. Material changes may be communicated through the app or email where appropriate.`,
+  },
+  {
+    title: "10. Contact",
+    body: `Privacy questions or requests: ${support}`,
+  },
+]
+
 export const termsOfServiceSections: LegalSection[] = [
   {
     title: "Terms of Service",
@@ -111,7 +191,7 @@ These Terms of Service ("Terms") govern your use of the ${appName} mobile applic
   },
   {
     title: "5. Appointments and payments",
-    body: `Appointment availability, pricing, and clinical services are provided by independent healthcare facilities and professionals. Online payments processed through Chapa or other payment partners are subject to their terms as well. We are not responsible for care delivered at a clinic or hospital outside the app.`,
+    body: `Appointment availability, pricing, and clinical services are provided by independent healthcare facilities and professionals. Online payments processed through Chapa or other payment partners are subject to their terms as well. If a doctor cancels a paid booking, the service fee is refunded automatically to the patient wallet and the doctor may be fined under the Appointment cancellation policy. Chapa gateway fees are not refunded. See the Cancellation policy for full details. We are not responsible for care delivered at a clinic or hospital outside the app.`,
   },
   {
     title: "6. Acceptable use",
@@ -165,3 +245,82 @@ export const medicalDisclaimerSections: LegalSection[] = [
     body: `Doctors and clinics listed in the app are independent professionals and facilities. ${appName} does not guarantee outcomes of medical care received through appointments booked in the app.`,
   },
 ]
+
+export const aboutAppSections: LegalSection[] = [
+  {
+    title: "About",
+    body: `An app that helps mothers understand the care they should give themselves and their children.`,
+  },
+  {
+    title: "Mission",
+    body: `Share clear health information with mothers, fathers, and caregivers, supporting safety at every stage and helping spot concerns early.`,
+  },
+  {
+    title: "Vision",
+    body: `A trusted maternal and child health app in Ethiopia and beyond, for growth monitoring, counseling, and early awareness.`,
+  },
+  {
+    title: "Disclaimer",
+    body: `Educational resources only. This does not replace professional medical advice. Always consult a qualified healthcare provider.`,
+  },
+]
+
+export const cancellationPolicySections: LegalSection[] = [
+  {
+    title: "Appointment cancellation policy",
+    body: `Effective date: ${legalEffectiveDate}
+
+This policy explains what happens when an appointment is cancelled on ${appName} and ${doctorAppName}. By booking or accepting appointments, you agree to these rules.`,
+  },
+  {
+    title: "1. Doctor availability",
+    body: `Doctors set their own weekly schedule and open time slots. When a patient books and pays for a slot, the doctor is expected to keep that appointment.`,
+  },
+  {
+    title: "2. If the doctor cancels",
+    body: `When a doctor cancels a paid appointment:
+• The patient is refunded automatically to their ${appName} wallet (the service fee that was paid).
+• Chapa gateway transaction fees are not refunded.
+• A cancellation penalty may be deducted from the doctor's wallet when enabled by the platform.
+• The time slot becomes available again for other patients.`,
+  },
+  {
+    title: "3. Doctor cancellation fine",
+    body: `Because doctors control their own availability, cancelling a paid booking may result in a fixed fine deducted from the doctor's wallet balance. The fine amount is set by iCare admin. If the doctor's available balance is lower than the fine, only the available balance is deducted.`,
+  },
+  {
+    title: "4. If the patient cancels",
+    body: `Patients may cancel while the appointment is still pending. Paid amounts are refunded to the patient wallet (service fee only). Chapa gateway fees are not refunded. No doctor fine applies when the patient cancels.`,
+  },
+  {
+    title: "5. Using wallet refunds",
+    body: `Wallet refunds can be used for future doctor bookings on ${appName}. Wallet balance is not a bank payout unless the platform offers a separate withdrawal process.`,
+  },
+  {
+    title: "6. Contact",
+    body: `Questions about cancellations or refunds: ${support}`,
+  },
+]
+
+export type LegalDocumentSlug =
+  | "terms-of-service"
+  | "privacy-policy"
+  | "medical-disclaimer"
+  | "cancellation-policy"
+  | "about-app"
+
+export function bundledSectionsFor(slug: LegalDocumentSlug): LegalSection[] {
+  switch (slug) {
+    case "terms-of-service":
+      return termsOfServiceSections
+    case "privacy-policy":
+      return privacyPolicySections
+    case "medical-disclaimer":
+      return medicalDisclaimerSections
+    case "cancellation-policy":
+      return cancellationPolicySections
+    case "about-app":
+      return aboutAppSections
+  }
+}
+

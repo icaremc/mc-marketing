@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import { LegalDocumentPage } from "@/components/legal-document-page"
-import { termsOfServiceSections } from "@/lib/legal-content"
+import { fetchLegalSections } from "@/lib/legal-documents"
 import { siteConfig } from "@/lib/brand"
 
 export const metadata: Metadata = {
@@ -12,8 +12,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const sections = await fetchLegalSections("terms-of-service")
   return (
-    <LegalDocumentPage pageTitle="Terms of Service" sections={termsOfServiceSections} />
+    <LegalDocumentPage pageTitle="Terms of Service" sections={sections} />
   )
 }

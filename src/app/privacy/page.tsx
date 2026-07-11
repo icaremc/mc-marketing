@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import { LegalDocumentPage } from "@/components/legal-document-page"
-import { privacyPolicySections } from "@/lib/legal-content"
+import { fetchLegalSections } from "@/lib/legal-documents"
 import { siteConfig } from "@/lib/brand"
 
 export const metadata: Metadata = {
@@ -12,8 +12,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const sections = await fetchLegalSections("privacy-policy")
   return (
-    <LegalDocumentPage pageTitle="Privacy Policy" sections={privacyPolicySections} />
+    <LegalDocumentPage pageTitle="Privacy Policy" sections={sections} />
   )
 }

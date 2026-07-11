@@ -12,6 +12,7 @@ export const siteConfig = {
   supportEmail: "support@icare-mc.com",
   supportPhone: "0912323811",
   privacyPolicyUrl: "https://mc-marketing-website.vercel.app/privacy",
+  doctorPrivacyPolicyUrl: "https://mc-marketing-website.vercel.app/doctors/privacy",
   termsOfServiceUrl: "https://mc-marketing-website.vercel.app/terms",
   medicalDisclaimerUrl: "https://mc-marketing-website.vercel.app/medical-disclaimer",
   playStoreUrl:

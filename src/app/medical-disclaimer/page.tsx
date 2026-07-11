@@ -1,22 +1,20 @@
 import type { Metadata } from "next"
 
 import { LegalDocumentPage } from "@/components/legal-document-page"
-import { medicalDisclaimerSections } from "@/lib/legal-content"
+import { fetchLegalSections } from "@/lib/legal-documents"
 import { siteConfig } from "@/lib/brand"
 
 export const metadata: Metadata = {
   title: "Medical disclaimer",
-  description: `Health information disclaimer for ${siteConfig.name}.`,
+  description: `${siteConfig.name} is an educational and care-coordination tool, not a substitute for medical advice.`,
   alternates: {
     canonical: "/medical-disclaimer",
   },
 }
 
-export default function MedicalDisclaimerPage() {
+export default async function MedicalDisclaimerPage() {
+  const sections = await fetchLegalSections("medical-disclaimer")
   return (
-    <LegalDocumentPage
-      pageTitle="Medical disclaimer"
-      sections={medicalDisclaimerSections}
-    />
+    <LegalDocumentPage pageTitle="Medical disclaimer" sections={sections} />
   )
 }
