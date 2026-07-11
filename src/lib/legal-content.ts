@@ -305,6 +305,7 @@ This policy explains what happens when an appointment is cancelled on ${appName}
 export type LegalDocumentSlug =
   | "terms-of-service"
   | "privacy-policy"
+  | "doctors-privacy-policy"
   | "medical-disclaimer"
   | "cancellation-policy"
   | "about-app"
@@ -315,6 +316,8 @@ export function bundledSectionsFor(slug: LegalDocumentSlug): LegalSection[] {
       return termsOfServiceSections
     case "privacy-policy":
       return privacyPolicySections
+    case "doctors-privacy-policy":
+      return doctorPrivacyPolicySections
     case "medical-disclaimer":
       return medicalDisclaimerSections
     case "cancellation-policy":

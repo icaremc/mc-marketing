@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import { LegalDocumentPage } from "@/components/legal-document-page"
-import { doctorPrivacyPolicySections } from "@/lib/legal-content"
+import { fetchLegalSections } from "@/lib/legal-documents"
 
 export const metadata: Metadata = {
   title: "iCare Doctors Privacy Policy",
@@ -12,11 +12,12 @@ export const metadata: Metadata = {
   },
 }
 
-export default function DoctorPrivacyPage() {
+export default async function DoctorPrivacyPage() {
+  const sections = await fetchLegalSections("doctors-privacy-policy")
   return (
     <LegalDocumentPage
       pageTitle="iCare Doctors Privacy Policy"
-      sections={doctorPrivacyPolicySections}
+      sections={sections}
     />
   )
 }
