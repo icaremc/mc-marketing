@@ -3,6 +3,8 @@ import {
 	CalendarHeartIcon,
 	HeartPulseIcon,
 	LanguagesIcon,
+	RulerIcon,
+	SyringeIcon,
 } from "lucide-react"
 
 import { Reveal } from "@/components/motion/reveal"
@@ -13,6 +15,16 @@ const featureCards = [
 		title: "Week-by-week guide",
 		desc: "See your pregnancy week, due date, and stage-specific guidance as your journey progresses.",
 		Icon: BabyIcon,
+	},
+	{
+		title: "Child growth tracking",
+		desc: "Log height, weight, and milestones so you can follow your child's growth over time.",
+		Icon: RulerIcon,
+	},
+	{
+		title: "Vaccination reminders",
+		desc: "Stay on schedule with timely reminders for upcoming immunizations and visit dates.",
+		Icon: SyringeIcon,
 	},
 	{
 		title: "Daily health tips",
@@ -68,12 +80,12 @@ export function FeaturesSection() {
 						Built for mothers, caregivers, and growing families.
 					</h2>
 					<p className="mt-4 text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-						{siteConfig.name} brings pregnancy tracking, health guidance, and
-						doctor access together in one calm, easy-to-use app.
+						{siteConfig.name} brings pregnancy tracking, child growth,
+						vaccination reminders, and doctor access together in one calm app.
 					</p>
 				</Reveal>
 
-				<div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+				<div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
 					{featureCards.map((feature, index) => (
 						<FeatureCard
 							key={feature.title}

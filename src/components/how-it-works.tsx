@@ -13,8 +13,8 @@ const steps = [
 	},
 	{
 		label: "Step 03",
-		title: "Track & learn",
-		desc: "Follow pregnancy weeks, daily tips, health logs, and milestones in one place.",
+		title: "Track & grow",
+		desc: "Follow pregnancy weeks, child growth, vaccination reminders, and daily tips in one place.",
 	},
 	{
 		label: "Step 04",

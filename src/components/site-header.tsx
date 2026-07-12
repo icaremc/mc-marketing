@@ -7,14 +7,26 @@ import { cn } from "@/lib/utils"
 
 type HeaderVariant = "home" | "page"
 
-const navClassName =
-  "text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30"
-
 export function SiteHeader({ variant = "page" }: { variant?: HeaderVariant }) {
   const hashPrefix = variant === "home" ? "" : "/"
+  const isHome = variant === "home"
+
+  const navClassName = cn(
+    "text-sm underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30",
+    isHome
+      ? "text-white/70 hover:text-white"
+      : "text-muted-foreground hover:text-foreground",
+  )
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/90 backdrop-blur supports-backdrop-filter:bg-background/75">
+    <header
+      className={cn(
+        "sticky top-0 z-40 border-b backdrop-blur",
+        isHome
+          ? "border-white/10 bg-[#0b1214]/80 supports-backdrop-filter:bg-[#0b1214]/70"
+          : "border-border/80 bg-background/90 supports-backdrop-filter:bg-background/75",
+      )}
+    >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link href="/" className="group flex items-center gap-3 font-semibold">
           <Image
@@ -25,7 +37,12 @@ export function SiteHeader({ variant = "page" }: { variant?: HeaderVariant }) {
             priority
             className="rounded-xl"
           />
-          <span className="font-heading text-lg text-foreground sm:text-xl">
+          <span
+            className={cn(
+              "font-heading text-lg sm:text-xl",
+              isHome ? "text-white" : "text-foreground",
+            )}
+          >
             {siteConfig.name}
           </span>
         </Link>
@@ -51,7 +68,7 @@ export function SiteHeader({ variant = "page" }: { variant?: HeaderVariant }) {
           </Link>
         </nav>
 
-        <HeaderActions />
+        <HeaderActions dark={isHome} />
       </div>
     </header>
   )

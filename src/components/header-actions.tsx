@@ -12,12 +12,20 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { cn } from "@/lib/utils"
 
-export function HeaderActions() {
+export function HeaderActions({ dark = false }: { dark?: boolean }) {
   return (
     <div className="flex items-center gap-2">
-      <ThemeToggle />
-      <Button asChild size="sm" className="hidden sm:inline-flex">
+      {!dark ? <ThemeToggle /> : null}
+      <Button
+        asChild
+        size="sm"
+        className={cn(
+          "hidden sm:inline-flex",
+          dark && "bg-primary text-primary-foreground hover:bg-primary/90",
+        )}
+      >
         <Link href="#download">Download app</Link>
       </Button>
 
@@ -27,7 +35,11 @@ export function HeaderActions() {
             type="button"
             variant="outline"
             size="icon"
-            className="md:hidden"
+            className={cn(
+              "md:hidden",
+              dark &&
+                "border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white",
+            )}
             aria-label="Open menu"
           >
             <MenuIcon aria-hidden="true" />
@@ -49,6 +61,9 @@ export function HeaderActions() {
             </Button>
             <Button asChild variant="ghost" className="justify-start">
               <Link href="#faq">FAQ</Link>
+            </Button>
+            <Button asChild variant="ghost" className="justify-start">
+              <Link href="/about">About</Link>
             </Button>
             <Button asChild variant="ghost" className="justify-start">
               <Link href="/contact">Contact</Link>

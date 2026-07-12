@@ -6,7 +6,7 @@ import { siteConfig } from "@/lib/brand"
 
 export function DownloadAppCta() {
 	return (
-		<section className="px-4 pb-16 pt-8 sm:px-6 sm:pb-20">
+		<section id="download" className="scroll-mt-24 px-4 pb-16 pt-8 sm:px-6 sm:pb-20">
 			<div className="mx-auto w-full max-w-6xl">
 				<Reveal>
 					<div className="overflow-hidden rounded-3xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
@@ -16,8 +16,8 @@ export function DownloadAppCta() {
 									Start your journey with {siteConfig.name}.
 								</h2>
 								<p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
-									Download the app, set your pregnancy dates, and get guidance
-									that grows with you, from early weeks to booking care.
+									Download the app to track pregnancy, child growth, and
+									vaccination reminders, from early weeks through growing up.
 								</p>
 								<StoreBadges className="mt-8" />
 							</div>

@@ -5,7 +5,7 @@ export const siteConfig = {
   taglineAm: "ለጤነዎ የሚተጋ",
   title: "ICare MC | Mother & child health",
   description:
-    "Track pregnancy weeks, daily health tips, doctor appointments, and milestones for mothers and caregivers. Available in English, Amharic, and Oromo.",
+    "Track pregnancy weeks, child growth, vaccination reminders, daily health tips, and doctor appointments. Available in English, Amharic, and Oromo.",
   siteUrl: "https://mc-marketing-website.vercel.app",
   locale: "en_US",
   themeColor: "#4CAF8A",
