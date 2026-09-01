@@ -9,11 +9,15 @@ import { siteConfig } from "@/lib/brand"
 const faqs = [
 	{
 		q: "What is ICare MC?",
-		a: "ICare MC is a mother and child health companion app. It helps you track pregnancy weeks, monitor child growth, get vaccination reminders, read daily tips, and book appointments with verified doctors.",
+		a: "ICare MC is a mother and child health companion app. It helps you track pregnancy weeks, monitor child growth, get vaccination reminders, read daily tips, subscribe for premium content, and book appointments with verified doctors.",
 	},
 	{
 		q: "Can I track my child's growth?",
 		a: "Yes. Add your child to the app and log growth measurements and milestones so you can follow development over time.",
+	},
+	{
+		q: "Does ICare MC require a subscription?",
+		a: "The app is free to download. An optional in-app subscription unlocks the full week-by-week guide, daily health tips, and premium content. Doctor appointments are booked separately with individual consultation fees.",
 	},
 	{
 		q: "Does the app remind me about vaccinations?",
@@ -25,7 +29,7 @@ const faqs = [
 	},
 	{
 		q: "Is ICare MC free to download?",
-		a: "Yes. Download the app for free and create your account to start tracking pregnancy, growth, and vaccinations.",
+		a: "Yes. Download the app for free and create your account to start tracking pregnancy, growth, and vaccinations. Premium content is available through an optional subscription.",
 	},
 	{
 		q: "Can I book doctors in the app?",

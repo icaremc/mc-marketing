@@ -1,9 +1,12 @@
+"use client"
+
 import {
 	BabyIcon,
 	CalendarHeartIcon,
 	HeartPulseIcon,
 	LanguagesIcon,
 	RulerIcon,
+	SparklesIcon,
 	SyringeIcon,
 } from "lucide-react"
 
@@ -20,6 +23,11 @@ const featureCards = [
 		title: "Child growth tracking",
 		desc: "Log height, weight, and milestones so you can follow your child's growth over time.",
 		Icon: RulerIcon,
+	},
+	{
+		title: "Subscription access",
+		desc: "Unlock the full week-by-week guide, daily health tips, and premium content with an optional in-app subscription.",
+		Icon: SparklesIcon,
 	},
 	{
 		title: "Vaccination reminders",
@@ -71,7 +79,7 @@ export function FeaturesSection() {
 		<section id="features" className="relative scroll-mt-24 bg-muted/40 py-20 sm:py-24">
 			<div
 				aria-hidden
-				className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(76,175,138,0.08)_1px,transparent_1px)] [background-size:24px_24px]"
+				className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(76,175,138,0.08)_1px,transparent_1px)] bg-size-[24px_24px]"
 			/>
 
 			<div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
@@ -80,8 +88,9 @@ export function FeaturesSection() {
 						Built for mothers, caregivers, and growing families.
 					</h2>
 					<p className="mt-4 text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-						{siteConfig.name} brings pregnancy tracking, child growth,
-						vaccination reminders, and doctor access together in one calm app.
+						{siteConfig.name} brings pregnancy tracking, child growth, daily
+						tips, vaccination reminders, subscription access, and doctor booking
+						together in one calm app.
 					</p>
 				</Reveal>
 

@@ -28,11 +28,11 @@ values (
     },
     {
       "title": "5. Data retention",
-      "body": "We retain your information while your account is active and as needed to provide the Service, settle payouts, resolve disputes, and meet legal and financial record-keeping obligations. You may request account deletion by contacting support@icare-mc.com."
+      "body": "We retain your information while your account is active and as needed to provide the Service, settle payouts, resolve disputes, and meet legal and financial record-keeping obligations. You may request account deletion by contacting support@icaremchealth.com."
     },
     {
       "title": "6. Your choices and rights",
-      "body": "You can update your profile, services, availability, and bank details in the app, and manage notification preferences in Settings. Depending on applicable law, you may request access, correction, or deletion of your personal data by emailing support@icare-mc.com. Some financial records may be retained where required by law even after account deletion."
+      "body": "You can update your profile, services, availability, and bank details in the app, and manage notification preferences in Settings. Depending on applicable law, you may request access, correction, or deletion of your personal data by emailing support@icaremchealth.com. Some financial records may be retained where required by law even after account deletion."
     },
     {
       "title": "7. Patient data responsibilities",
@@ -48,7 +48,7 @@ values (
     },
     {
       "title": "10. Contact",
-      "body": "Privacy questions or requests: support@icare-mc.com"
+      "body": "Privacy questions or requests: support@icaremchealth.com"
     }
   ]$json$::jsonb,
   now()

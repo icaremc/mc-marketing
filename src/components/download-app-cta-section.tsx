@@ -16,8 +16,8 @@ export function DownloadAppCta() {
 									Start your journey with {siteConfig.name}.
 								</h2>
 								<p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
-									Download the app to track pregnancy, child growth, and
-									vaccination reminders, from early weeks through growing up.
+									Download the app to track pregnancy and child growth, get daily
+									tips, and unlock premium content with an optional subscription.
 								</p>
 								<StoreBadges className="mt-8" />
 							</div>
@@ -28,7 +28,7 @@ export function DownloadAppCta() {
 									alt={`${siteConfig.name} app logo`}
 									width={220}
 									height={220}
-									className="h-auto w-[180px] rounded-[2.5rem] drop-shadow-lg sm:w-[220px]"
+									className="h-auto w-45 rounded-[2.5rem] drop-shadow-lg sm:w-55"
 								/>
 							</div>
 						</div>

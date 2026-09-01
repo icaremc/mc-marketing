@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { MailIcon, PhoneIcon } from "lucide-react"
 
@@ -29,19 +31,21 @@ export default function ContactPage() {
                 Talk to the {siteConfig.name} team.
               </h1>
               <p className="max-w-xl text-pretty text-muted-foreground sm:text-lg">
-                Questions about the app, doctor booking, or your account? We are
-                here to help mothers and caregivers across Ethiopia.
+                Questions about the app, subscriptions, doctor booking, or your
+                account? We are here to help mothers and caregivers across Ethiopia.
               </p>
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Button asChild size="lg">
-                <a href={`tel:${siteConfig.supportPhone}`}>
-                  <PhoneIcon data-icon="inline-start" aria-hidden="true" />
-                  Call {siteConfig.supportPhone}
-                </a>
-              </Button>
-              <Button asChild size="lg" variant="outline">
+            <div className="flex flex-col gap-3">
+              {siteConfig.supportPhones.map((phone) => (
+                <Button key={phone} asChild size="lg" className="w-fit">
+                  <a href={`tel:${phone}`}>
+                    <PhoneIcon data-icon="inline-start" aria-hidden="true" />
+                    Call {phone}
+                  </a>
+                </Button>
+              ))}
+              <Button asChild size="lg" variant="outline" className="w-fit">
                 <a href={`mailto:${siteConfig.supportEmail}`}>
                   <MailIcon data-icon="inline-start" aria-hidden="true" />
                   Email support
@@ -54,8 +58,8 @@ export default function ContactPage() {
             <CardHeader>
               <CardTitle>Get the app</CardTitle>
               <CardDescription>
-                Download {siteConfig.name} to track pregnancy, read daily tips,
-                and book doctors.
+                Download {siteConfig.name} to track pregnancy and child growth,
+                read daily tips, and book doctors.
               </CardDescription>
             </CardHeader>
             <CardContent>

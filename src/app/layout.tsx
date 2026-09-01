@@ -32,6 +32,7 @@ export const metadata: Metadata = {
     "pregnancy",
     "maternal health",
     "child care",
+    "subscription",
     "Ethiopia",
     "Amharic",
     "Oromo",

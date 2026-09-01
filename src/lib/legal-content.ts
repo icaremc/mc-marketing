@@ -179,7 +179,7 @@ These Terms of Service ("Terms") govern your use of the ${appName} mobile applic
   },
   {
     title: "2. Nature of the Service",
-    body: `${appName} provides maternal and child health education, pregnancy tracking tools, growth milestones, appointment booking, secure messaging with healthcare providers, and optional online payments for medical services. The Service is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of a qualified healthcare provider with questions about a medical condition.`,
+    body: `${appName} provides maternal and child health education, pregnancy tracking tools, child growth milestones, daily tips, optional in-app subscription for premium content, appointment booking, secure messaging with healthcare providers, and optional online payments for medical services. The Service is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of a qualified healthcare provider with questions about a medical condition.`,
   },
   {
     title: "3. Accounts",
@@ -191,7 +191,7 @@ These Terms of Service ("Terms") govern your use of the ${appName} mobile applic
   },
   {
     title: "5. Appointments and payments",
-    body: `Appointment availability, pricing, and clinical services are provided by independent healthcare facilities and professionals. Online payments processed through Chapa or other payment partners are subject to their terms as well. If a doctor cancels a paid booking, the service fee is refunded automatically to the patient wallet and the doctor may be fined under the Appointment cancellation policy. Chapa gateway fees are not refunded. See the Cancellation policy for full details. We are not responsible for care delivered at a clinic or hospital outside the app.`,
+    body: `Appointment availability, pricing, and clinical services are provided by independent healthcare facilities and professionals. Optional in-app subscriptions for premium content are billed through your app store account and subject to the store's terms. Online payments processed through Chapa or other payment partners are subject to their terms as well. If a doctor cancels a paid booking, the service fee is refunded automatically to the patient wallet and the doctor may be fined under the Appointment cancellation policy. Chapa gateway fees are not refunded. See the Cancellation policy for full details. We are not responsible for care delivered at a clinic or hospital outside the app.`,
   },
   {
     title: "6. Acceptable use",

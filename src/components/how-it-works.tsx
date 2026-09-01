@@ -14,7 +14,7 @@ const steps = [
 	{
 		label: "Step 03",
 		title: "Track & grow",
-		desc: "Follow pregnancy weeks, child growth, vaccination reminders, and daily tips in one place.",
+		desc: "Follow pregnancy weeks, child growth, vaccination reminders, and daily tips. Subscribe in the app for premium content.",
 	},
 	{
 		label: "Step 04",

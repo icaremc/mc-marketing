@@ -16,14 +16,14 @@ export function LandingHero() {
 			{/* Soft atmosphere on the copy side */}
 			<div
 				aria-hidden
-				className="pointer-events-none absolute inset-y-0 left-0 z-[1] w-full bg-[radial-gradient(ellipse_at_20%_30%,rgba(76,175,138,0.28),transparent_55%),linear-gradient(90deg,#0b1214_0%,#0b1214_42%,rgba(11,18,20,0.55)_62%,transparent_78%)] lg:w-[70%]"
+				className="pointer-events-none absolute inset-y-0 left-0 z-1 w-full bg-[radial-gradient(ellipse_at_20%_30%,rgba(76,175,138,0.28),transparent_55%),linear-gradient(90deg,#0b1214_0%,#0b1214_42%,rgba(11,18,20,0.55)_62%,transparent_78%)] lg:w-[70%]"
 			/>
 			<div
 				aria-hidden
-				className="pointer-events-none absolute -top-24 left-1/4 z-[1] h-64 w-64 rounded-full bg-primary/20 blur-3xl"
+				className="pointer-events-none absolute -top-24 left-1/4 z-1 h-64 w-64 rounded-full bg-primary/20 blur-3xl"
 			/>
 
-			<div className="relative mx-auto grid min-h-[min(92vh,880px)] w-full max-w-[1400px] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+			<div className="relative mx-auto grid min-h-[min(92vh,880px)] w-full max-w-350 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
 				{/* Copy */}
 				<div className="relative z-10 flex flex-col justify-center px-4 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24 xl:pl-16">
 					<Reveal>
@@ -34,11 +34,12 @@ export function LandingHero() {
 							{siteConfig.name}
 						</p>
 						<h1 className="mt-5 max-w-xl text-balance text-2xl font-medium leading-snug text-white/90 sm:text-3xl lg:text-4xl">
-							Your pregnancy companion,{" "}
-							<span className="text-primary">week by week.</span>
+							Pregnancy and child growth,{" "}
+							<span className="text-primary">in one app.</span>
 						</h1>
 						<p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-white/65 sm:text-lg">
-							Track pregnancy, child growth, and vaccination reminders, plus
+							Track pregnancy weeks and child growth, get daily tips and
+							vaccination reminders, subscribe for premium content, and book
 							doctor visits in English, Amharic, and Oromo.
 						</p>
 					</Reveal>
@@ -70,12 +71,16 @@ export function LandingHero() {
 						<span className="hidden text-white/25 sm:inline" aria-hidden>
 							|
 						</span>
+						<span>Subscription</span>
+						<span className="hidden text-white/25 sm:inline" aria-hidden>
+							|
+						</span>
 						<span>Vaccination reminders</span>
 					</Reveal>
 				</div>
 
 				{/* Hero portrait — edge-to-edge on large screens */}
-				<div className="relative min-h-[420px] sm:min-h-[520px] lg:min-h-full">
+				<div className="relative min-h-105 sm:min-h-130 lg:min-h-full">
 					<motion.div
 						className="absolute inset-0"
 						initial={reduce ? false : { opacity: 0, scale: 1.04 }}
@@ -95,15 +100,15 @@ export function LandingHero() {
 					{/* Blend into copy on mobile/tablet */}
 					<div
 						aria-hidden
-						className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#0b1214] to-transparent lg:hidden"
+						className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-[#0b1214] to-transparent lg:hidden"
 					/>
 					<div
 						aria-hidden
-						className="pointer-events-none absolute inset-y-0 left-0 hidden w-32 bg-gradient-to-r from-[#0b1214] to-transparent lg:block"
+						className="pointer-events-none absolute inset-y-0 left-0 hidden w-32 bg-linear-to-r from-[#0b1214] to-transparent lg:block"
 					/>
 					<div
 						aria-hidden
-						className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0b1214]/40 to-transparent lg:h-32"
+						className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-[#0b1214]/40 to-transparent lg:h-32"
 					/>
 				</div>
 			</div>

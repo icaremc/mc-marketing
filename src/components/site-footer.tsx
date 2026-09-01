@@ -60,9 +60,11 @@ export function SiteFooter() {
 						<a href={`mailto:${siteConfig.supportEmail}`} className={footerLinkClass}>
 							{siteConfig.supportEmail}
 						</a>
-						<a href={`tel:${siteConfig.supportPhone}`} className={footerLinkClass}>
-							{siteConfig.supportPhone}
-						</a>
+						{siteConfig.supportPhones.map((phone) => (
+							<a key={phone} href={`tel:${phone}`} className={footerLinkClass}>
+								{phone}
+							</a>
+						))}
 					</div>
 				</div>
 
