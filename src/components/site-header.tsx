@@ -66,6 +66,9 @@ export function SiteHeader({ variant = "page" }: { variant?: HeaderVariant }) {
           <Link href="/contact" className={navClassName}>
             Contact
           </Link>
+          <Link href="/register" className={navClassName}>
+            Register
+          </Link>
         </nav>
 
         <HeaderActions dark={isHome} />

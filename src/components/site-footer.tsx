@@ -43,6 +43,8 @@ export function SiteFooter() {
 						<FooterLink href="#how-it-works">How it works</FooterLink>
 						<FooterLink href="#features">Features</FooterLink>
 						<FooterLink href="#download">Download</FooterLink>
+						<FooterLink href="/register">Register</FooterLink>
+						<FooterLink href="/subscribe">Subscribe</FooterLink>
 					</div>
 
 					<div className="flex flex-col gap-2">
