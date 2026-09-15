@@ -24,10 +24,11 @@ export function HeaderActions({ dark = false }: { dark?: boolean }) {
         variant={dark ? "default" : "outline"}
         className={cn(
           "hidden sm:inline-flex",
-          dark && "border-white/25 bg-transparent text-white hover:bg-white/10 hover:text-white",
+          dark &&
+            "border-white/25 bg-transparent text-white hover:bg-white/10 hover:text-white",
         )}
       >
-        <Link href="/register">Register</Link>
+        <Link href="/login">Sign in</Link>
       </Button>
       <Button
         asChild
@@ -78,6 +79,9 @@ export function HeaderActions({ dark = false }: { dark?: boolean }) {
             </Button>
             <Button asChild variant="ghost" className="justify-start">
               <Link href="/contact">Contact</Link>
+            </Button>
+            <Button asChild variant="ghost" className="justify-start">
+              <Link href="/login">Sign in</Link>
             </Button>
             <Button asChild variant="ghost" className="justify-start">
               <Link href="/register">Register</Link>
