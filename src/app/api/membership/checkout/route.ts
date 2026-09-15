@@ -53,11 +53,15 @@ export async function POST(request: Request) {
   const chapa = await fetchChapaConfig()
   if (!chapa || !chapa.enable || !chapa.isActive) {
     return NextResponse.json(
-      { error: "Online payment is not configured." },
+      {
+        error:
+          "Online payment is not configured in admin app settings (payment / Chapa).",
+      },
       { status: 503 },
     )
   }
 
+  // Charge plan + gateway fee using admin feePercent from app_settings.
   const amount = checkoutTotal(plan.yearlyPrice, chapa.feePercent)
   const txRef = makeTxRef()
   const origin = new URL(request.url).origin

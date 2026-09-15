@@ -71,6 +71,8 @@ export function ActivationCheckout({
             feePercent?: number
             feeAmount?: number
             total?: number
+            paymentConfigured?: boolean
+            source?: { plan?: string; chapa?: string }
           }
           if (!cancelled) {
             setPlanLabel("Yearly membership")
@@ -86,7 +88,7 @@ export function ActivationCheckout({
               plan.feeAmount != null
             ) {
               setFeeLabel(
-                `Chapa fee (${plan.feePercent}%): ${plan.feeAmount.toLocaleString()} ${currency}`,
+                `Gateway fee (${plan.feePercent}%): ${plan.feeAmount.toLocaleString()} ${currency}`,
               )
             } else {
               setFeeLabel("")
@@ -100,6 +102,10 @@ export function ActivationCheckout({
             }
             if (plan.enabled === false) {
               setError("Membership is not available right now.")
+            } else if (plan.paymentConfigured === false) {
+              setError(
+                "Online payment is not configured yet. Ask support to enable Chapa in admin payment settings.",
+              )
             }
           }
         }
