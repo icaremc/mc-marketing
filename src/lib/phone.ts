@@ -1,3 +1,5 @@
+/** Phone helpers aligned with icare_mc `phone_format.dart`. */
+
 const ETHIOPIA_DIAL = "+251"
 const LOCAL_LENGTH = 9
 
@@ -8,8 +10,10 @@ export function normalizeEthiopianLocalDigits(input: string): string {
   return digits
 }
 
-export function isValidEthiopianLocalPhone(value: string): boolean {
-  const trimmed = value.trim()
+export function isValidEthiopianLocalPhone(
+  value: string | null | undefined,
+): boolean {
+  const trimmed = (value ?? "").trim()
   if (!trimmed) return false
   const digits = normalizeEthiopianLocalDigits(trimmed)
   if (
@@ -72,4 +76,3 @@ export function displayPhone(e164: string): string {
   if (!value) return ""
   return value.startsWith("+") ? value : `+${value}`
 }
-
