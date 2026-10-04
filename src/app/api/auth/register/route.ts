@@ -1,13 +1,9 @@
 import { NextResponse } from "next/server"
 
-import {
-  authEmailFromPhone,
-  formatE164EthiopiaPhone,
-} from "@/lib/phone"
+import { backendFetch, sessionFromTokenOut, type TokenOut } from "@/lib/backend"
+import { formatE164EthiopiaPhone } from "@/lib/phone"
 import { clearPhoneVerifiedCookie, getPhoneVerifiedCookie } from "@/lib/otp-session"
 import { setSessionCookies } from "@/lib/session"
-import { getSupabase } from "@/lib/supabase"
-import { getSupabaseAdmin, getSupabaseWithToken } from "@/lib/supabase-admin"
 
 type Body = {
   fullName?: string
@@ -53,38 +49,27 @@ export async function POST(request: Request) {
   }
 
   const verified = await getPhoneVerifiedCookie()
-  if (!verified || verified.phone !== phone) {
+  if (!verified || verified.phone !== phone || !verified.otp) {
     return NextResponse.json(
       { error: "Verify your phone number first." },
       { status: 403 },
     )
   }
 
-  const email = authEmailFromPhone(phone)
-  const anon = getSupabase()
-  const admin = getSupabaseAdmin()
-  if (!anon || !admin || !email) {
-    return NextResponse.json(
-      { error: "Auth is not configured on this site." },
-      { status: 503 },
-    )
-  }
-
-  const authData = {
-    full_name: fullName,
-    phone,
-    user_tracking_type: "pregnancy",
-  }
-
-  const { data: created, error: createError } = await admin.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-    user_metadata: authData,
+  const result = await backendFetch<TokenOut>("/auth/patient/signup", {
+    method: "POST",
+    json: {
+      phone,
+      password,
+      otp: verified.otp,
+      full_name: fullName,
+      account_type: "Mother",
+      referral_code: referralCode,
+    },
   })
 
-  if (createError || !created.user) {
-    const message = createError?.message?.toLowerCase() ?? ""
+  if (!result.ok || !result.data.access_token || !result.data.refresh_token) {
+    const message = (!result.ok ? result.message : "Could not create account.").toLowerCase()
     if (message.includes("already") || message.includes("registered")) {
       return NextResponse.json(
         {
@@ -94,60 +79,25 @@ export async function POST(request: Request) {
         { status: 409 },
       )
     }
-    return NextResponse.json(
-      { error: createError?.message ?? "Could not create account." },
-      { status: 400 },
-    )
-  }
-
-  const { data: signedIn, error: signInError } = await anon.auth.signInWithPassword({
-    email,
-    password,
-  })
-
-  if (signInError || !signedIn.session || !signedIn.user) {
-    return NextResponse.json(
-      { error: signInError?.message ?? "Account created, but sign-in failed. Try again." },
-      { status: 500 },
-    )
-  }
-
-  const profile: Record<string, unknown> = {
-    id: signedIn.user.id,
-    full_name: fullName,
-    phone,
-    account_type: "mother",
-    user_tracking_type: "pregnancy",
-    updated_at: new Date().toISOString(),
-  }
-  if (referralCode) profile.referral_code_used = referralCode
-
-  const { error: profileError } = await admin.from("profiles").upsert(profile)
-  if (profileError && referralCode) {
-    delete profile.referral_code_used
-    await admin.from("profiles").upsert(profile)
-  }
-
-  if (referralCode) {
-    try {
-      const userClient = getSupabaseWithToken(signedIn.session.access_token)
-      await userClient?.rpc("apply_doctor_referral_code", { p_code: referralCode })
-    } catch {
-      // best-effort; profile already stored code when column exists
+    if (message.includes("otp") || message.includes("invalid")) {
+      return NextResponse.json(
+        { error: "That verification code is incorrect or expired. Request a new one." },
+        { status: 400 },
+      )
     }
+    return NextResponse.json(
+      { error: !result.ok ? result.message : "Could not create account." },
+      { status: result.status >= 400 ? result.status : 400 },
+    )
   }
 
-  await setSessionCookies({
-    accessToken: signedIn.session.access_token,
-    refreshToken: signedIn.session.refresh_token,
-    expiresAt: signedIn.session.expires_at ?? Math.floor(Date.now() / 1000) + 3600,
-  })
+  await setSessionCookies(sessionFromTokenOut(result.data))
   await clearPhoneVerifiedCookie()
 
   return NextResponse.json({
     ok: true,
     user: {
-      id: signedIn.user.id,
+      id: result.data.user_id,
       fullName,
       phone,
     },

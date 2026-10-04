@@ -31,13 +31,22 @@ export function SubscribeCallbackClient() {
         })
         const data = (await response.json()) as { error?: string; ok?: boolean }
         if (cancelled) return
-        if (!response.ok) {
-          setStatus("error")
-          setMessage(data.error ?? "Could not activate your subscription.")
+        if (response.ok && data.ok) {
+          setStatus("success")
+          setMessage("Your yearly membership is active.")
           return
         }
-        setStatus("success")
-        setMessage("Your yearly membership is active.")
+        // 202: Chapa paid, backend webhook still catching up
+        if (response.status === 202) {
+          setStatus("success")
+          setMessage(
+            data.error ??
+              "Payment received. Your membership should appear in the app shortly.",
+          )
+          return
+        }
+        setStatus("error")
+        setMessage(data.error ?? "Could not activate your subscription.")
       } catch {
         if (cancelled) return
         setStatus("error")

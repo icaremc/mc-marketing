@@ -1,5 +1,4 @@
-import { getSupabase, isSupabaseConfigured } from "@/lib/supabase"
-import { getSupabaseAdmin } from "@/lib/supabase-admin"
+import { backendFetch } from "@/lib/backend"
 
 export type MembershipSettings = {
   enabled: boolean
@@ -24,6 +23,8 @@ const DEFAULT_MEMBERSHIP: MembershipSettings = {
   durationDays: 365,
   requireForAppAccess: true,
 }
+
+const DEFAULT_CHAPA_FEE_PERCENT = 2.5
 
 function readNumber(value: unknown, fallback: number): number {
   if (typeof value === "number" && Number.isFinite(value)) return value
@@ -73,29 +74,16 @@ export function parseMembershipSettings(raw: unknown): MembershipSettings {
 }
 
 export async function fetchMembershipSettings(): Promise<MembershipSettings> {
-  if (!isSupabaseConfigured()) return { ...DEFAULT_MEMBERSHIP }
-  const client = getSupabase()
-  if (!client) return { ...DEFAULT_MEMBERSHIP }
-  try {
-    const { data } = await client
-      .from("app_settings")
-      .select("data")
-      .eq("id", "subscription")
-      .maybeSingle()
-    return parseMembershipSettings(data?.data)
-  } catch {
-    return { ...DEFAULT_MEMBERSHIP }
-  }
+  const result = await backendFetch<Record<string, unknown>>("/settings/subscription")
+  if (!result.ok) return { ...DEFAULT_MEMBERSHIP }
+  return parseMembershipSettings(result.data)
 }
-
-const DEFAULT_CHAPA_FEE_PERCENT = 2.5
 
 function resolveChapaFromSettings(raw: unknown): ChapaSettings | null {
   const root = parseData(raw)
   const chapa = parseData(root.chapa)
   if (Object.keys(chapa).length === 0) return null
 
-  // Marketing site is live — use production Chapa keys. Override with CHAPA_SANDBOX=true for test keys.
   const useSandbox =
     process.env.CHAPA_SANDBOX === "true" || process.env.CHAPA_SANDBOX === "1"
 
@@ -106,21 +94,14 @@ function resolveChapaFromSettings(raw: unknown): ChapaSettings | null {
     readString(flavor.publicKey, "") || readString(chapa.publicKey, "")
   if (!secretKey) return null
 
-  // Prefer flavor fee, then top-level; default 2.5% (Chapa Ethiopia rate used by the app).
   const feePercent = readNumber(
     flavor.feePercent ?? chapa.feePercent,
     DEFAULT_CHAPA_FEE_PERCENT,
   )
 
   return {
-    enable: readBoolean(
-      flavor.enable ?? chapa.enable,
-      true,
-    ),
-    isActive: readBoolean(
-      flavor.isActive ?? chapa.isActive,
-      true,
-    ),
+    enable: readBoolean(flavor.enable ?? chapa.enable, true),
+    isActive: readBoolean(flavor.isActive ?? chapa.isActive, true),
     publicKey,
     secretKey,
     feePercent: feePercent > 0 ? feePercent : DEFAULT_CHAPA_FEE_PERCENT,
@@ -142,18 +123,9 @@ export async function fetchChapaSettings(): Promise<ChapaSettings | null> {
     }
   }
 
-  const admin = getSupabaseAdmin()
-  if (!admin) return null
-  try {
-    const { data } = await admin
-      .from("app_settings")
-      .select("data")
-      .eq("id", "payment")
-      .maybeSingle()
-    return resolveChapaFromSettings(data?.data)
-  } catch {
-    return null
-  }
+  const result = await backendFetch<Record<string, unknown>>("/settings/payment")
+  if (!result.ok) return null
+  return resolveChapaFromSettings(result.data)
 }
 
 export function checkoutTotal(baseAmount: number, feePercent: number): number {

@@ -1,9 +1,9 @@
 import { cookies } from "next/headers"
 
 const VERIFIED_PHONE = "mc_verified_phone"
-const VERIFICATION_ID = "mc_verification_id"
+const OTP_CODE = "mc_otp_code"
 
-export async function setPhoneVerifiedCookie(phoneE164: string, verificationId: string) {
+export async function setPhoneVerifiedCookie(phoneE164: string, otp: string) {
   const jar = await cookies()
   const common = {
     httpOnly: true,
@@ -13,22 +13,22 @@ export async function setPhoneVerifiedCookie(phoneE164: string, verificationId: 
     maxAge: 60 * 15,
   }
   jar.set(VERIFIED_PHONE, phoneE164, common)
-  jar.set(VERIFICATION_ID, verificationId, common)
+  jar.set(OTP_CODE, otp, common)
 }
 
 export async function getPhoneVerifiedCookie(): Promise<{
   phone: string
-  verificationId: string
+  otp: string
 } | null> {
   const jar = await cookies()
   const phone = jar.get(VERIFIED_PHONE)?.value
-  const verificationId = jar.get(VERIFICATION_ID)?.value
-  if (!phone || !verificationId) return null
-  return { phone, verificationId }
+  const otp = jar.get(OTP_CODE)?.value
+  if (!phone || !otp) return null
+  return { phone, otp }
 }
 
 export async function clearPhoneVerifiedCookie() {
   const jar = await cookies()
   jar.delete(VERIFIED_PHONE)
-  jar.delete(VERIFICATION_ID)
+  jar.delete(OTP_CODE)
 }

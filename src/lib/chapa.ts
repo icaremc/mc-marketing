@@ -1,7 +1,3 @@
-export type ChapaInitResult =
-  | { ok: true; checkoutUrl: string; txRef: string }
-  | { ok: false; error: string }
-
 export type ChapaVerifyResult =
   | { ok: true; amount: number; currency: string; status: string }
   | { ok: false; error: string }
@@ -23,78 +19,7 @@ function chapaError(body: string): string {
   } catch {
     // ignore
   }
-  return "Could not open Chapa checkout."
-}
-
-export function generateTxRef(userId: string): string {
-  const fragment = userId.replace(/-/g, "").slice(0, 10)
-  const rnd = Math.random().toString(36).slice(2, 8)
-  return `icare_${fragment}_${Date.now()}_${rnd}`
-}
-
-function customize(value: string, max: number): string {
-  let cleaned = value
-    .replace(/·/g, "-")
-    .replace(/[^A-Za-z0-9._\- ]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-  if (!cleaned) cleaned = "iCare MC"
-  return cleaned.length <= max ? cleaned : cleaned.slice(0, max).trim()
-}
-
-export async function initializeChapaPayment(input: {
-  secretKey: string
-  amount: number
-  currency: string
-  email: string
-  phone: string
-  firstName: string
-  lastName: string
-  txRef: string
-  returnUrl: string
-  title?: string
-  description?: string
-}): Promise<ChapaInitResult> {
-  const payload: Record<string, unknown> = {
-    amount: input.amount.toFixed(2),
-    currency: input.currency,
-    email: input.email,
-    first_name: input.firstName || "Member",
-    last_name: input.lastName || "iCare",
-    tx_ref: input.txRef,
-    return_url: input.returnUrl,
-    customization: {
-      title: customize(input.title ?? "Yearly plan", 16),
-      description: customize(input.description ?? "iCare MC membership", 50),
-    },
-  }
-  if (input.phone) payload.phone_number = input.phone
-
-  const response = await fetch("https://api.chapa.co/v1/transaction/initialize", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${input.secretKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  })
-
-  const body = await response.text()
-  if (!response.ok) return { ok: false, error: chapaError(body) }
-
-  try {
-    const decoded = JSON.parse(body) as {
-      status?: string
-      data?: { checkout_url?: string }
-    }
-    const url = decoded.data?.checkout_url
-    if (decoded.status !== "success" || !url) {
-      return { ok: false, error: chapaError(body) }
-    }
-    return { ok: true, checkoutUrl: url, txRef: input.txRef }
-  } catch {
-    return { ok: false, error: "Could not open Chapa checkout." }
-  }
+  return "Could not verify payment."
 }
 
 export async function verifyChapaPayment(input: {

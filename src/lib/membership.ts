@@ -1,6 +1,5 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js"
-
 import { siteConfig } from "@/lib/brand"
+import { backendFetch } from "@/lib/backend"
 import {
   checkoutTotal,
   fetchProductionChapaConfig,
@@ -36,15 +35,14 @@ export function bearerToken(request: Request): string | null {
   return token.length > 20 ? token : null
 }
 
-/** Authed Supabase client for a user access token (server routes). */
-export function supabaseWithToken(accessToken: string): SupabaseClient | null {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
-  if (!url || !anonKey) return null
-  return createClient(url, anonKey, {
-    global: { headers: { Authorization: `Bearer ${accessToken}` } },
-    auth: { persistSession: false, autoRefreshToken: false },
+export async function authMe(
+  accessToken: string,
+): Promise<{ id: string } | null> {
+  const result = await backendFetch<{ id: string }>("/auth/me", {
+    token: accessToken,
   })
+  if (!result.ok || !result.data?.id) return null
+  return { id: result.data.id }
 }
 
 export type MembershipPlan = {
@@ -59,7 +57,6 @@ export type MembershipPlan = {
   }
 }
 
-/** Yearly plan + Chapa fee from Supabase `app_settings`. */
 export async function fetchMembershipPlan(): Promise<MembershipPlan> {
   const [plan, chapa] = await Promise.all([
     fetchSubscriptionPlanSettings(),
@@ -79,7 +76,6 @@ export async function fetchMembershipPlan(): Promise<MembershipPlan> {
   }
 }
 
-/** Production Chapa keys from `app_settings` id=payment (admin). */
 export async function fetchChapaConfig(): Promise<ResolvedChapaConfig | null> {
   return fetchProductionChapaConfig()
 }

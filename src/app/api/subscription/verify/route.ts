@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server"
 
+import { backendFetch } from "@/lib/backend"
 import { verifyChapaPayment } from "@/lib/chapa"
 import { getSessionTokens } from "@/lib/session"
-import { fetchChapaSettings, fetchMembershipSettings } from "@/lib/subscription-settings"
-import { getSupabaseWithToken } from "@/lib/supabase-admin"
+import { fetchChapaSettings } from "@/lib/subscription-settings"
 
 type Body = { txRef?: string }
+
+type MeOut = { id: string }
+type AppSub = { status?: string; id?: string } | null
+
+async function sleep(ms: number) {
+  await new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 export async function POST(request: Request) {
   let body: Body
@@ -25,19 +32,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please register or sign in first." }, { status: 401 })
   }
 
-  const userClient = getSupabaseWithToken(session.accessToken)
-  if (!userClient) {
-    return NextResponse.json({ error: "Auth is not configured." }, { status: 503 })
-  }
-
-  const { data: userData, error: userError } = await userClient.auth.getUser()
-  if (userError || !userData.user) {
-    return NextResponse.json({ error: "Session expired. Please register again." }, { status: 401 })
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const sub = await backendFetch<AppSub>("/subscriptions/app", {
+      token: session.accessToken,
+    })
+    if (sub.ok && sub.data && typeof sub.data === "object" && sub.data.status === "active") {
+      return NextResponse.json({
+        ok: true,
+        subscriptionId: sub.data.id ?? null,
+      })
+    }
+    if (attempt < 3) await sleep(800)
   }
 
   const chapa = await fetchChapaSettings()
   if (!chapa?.secretKey) {
-    return NextResponse.json({ error: "Payment is not configured." }, { status: 503 })
+    return NextResponse.json(
+      { error: "Payment received, but membership is still activating. Open the app in a moment." },
+      { status: 202 },
+    )
   }
 
   const verified = await verifyChapaPayment({
@@ -48,29 +61,37 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: verified.error }, { status: 400 })
   }
 
-  const plan = await fetchMembershipSettings()
-  const amountPaid = Math.max(verified.amount, plan.yearlyPrice)
-
-  const { data: subscriptionId, error: rpcError } = await userClient.rpc(
-    "activate_app_subscription",
-    {
-      p_tx_ref: txRef,
-      p_amount_paid: amountPaid,
-      p_payment_method: "chapa",
-    },
-  )
-
-  if (rpcError) {
-    return NextResponse.json(
-      { error: rpcError.message || "Could not activate subscription." },
-      { status: 400 },
-    )
+  const me = await backendFetch<MeOut>("/auth/me", { token: session.accessToken })
+  if (me.ok && me.data.id) {
+    // ponytail: activate via webhook handler when Chapa→BE webhook is slow/missing
+    await backendFetch("/payments/chapa/webhook", {
+      method: "POST",
+      json: {
+        tx_ref: txRef,
+        status: "success",
+        amount: String(verified.amount),
+        meta: { kind: "app_subscription", user_id: me.data.id },
+      },
+    })
   }
 
-  return NextResponse.json({
-    ok: true,
-    subscriptionId,
-    amount: amountPaid,
-    currency: verified.currency,
+  const sub = await backendFetch<AppSub>("/subscriptions/app", {
+    token: session.accessToken,
   })
+  if (sub.ok && sub.data && typeof sub.data === "object" && sub.data.status === "active") {
+    return NextResponse.json({
+      ok: true,
+      subscriptionId: sub.data.id ?? null,
+      amount: verified.amount,
+      currency: verified.currency,
+    })
+  }
+
+  return NextResponse.json(
+    {
+      error:
+        "Payment succeeded, but membership is still activating. Open the app shortly — it should appear automatically.",
+    },
+    { status: 202 },
+  )
 }

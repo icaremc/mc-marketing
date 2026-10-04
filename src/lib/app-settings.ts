@@ -1,4 +1,4 @@
-import { getServiceSupabase, getSupabase } from "@/lib/supabase"
+import { backendFetch } from "@/lib/backend"
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (!value) return null
@@ -20,10 +20,6 @@ function readString(value: unknown, fallback = ""): string {
   return typeof value === "string" ? value.trim() : fallback
 }
 
-function readBoolean(value: unknown, fallback = false): boolean {
-  return typeof value === "boolean" ? value : fallback
-}
-
 function readNumber(value: unknown, fallback: number): number {
   if (typeof value === "number" && Number.isFinite(value)) return value
   if (typeof value === "string") {
@@ -36,21 +32,11 @@ function readNumber(value: unknown, fallback: number): number {
 async function fetchAppSettingsRow(
   id: string,
 ): Promise<Record<string, unknown> | null> {
-  // Prefer service role — payment keys are admin-managed and may be RLS-restricted.
-  const supabase = getServiceSupabase() ?? getSupabase()
-  if (!supabase) return null
-
-  const { data, error } = await supabase
-    .from("app_settings")
-    .select("data")
-    .eq("id", id)
-    .maybeSingle()
-
-  if (error || !data) {
-    console.error(`[app-settings] failed to load id=${id}`, error?.message)
-    return null
-  }
-  return asRecord(data.data)
+  const result = await backendFetch<Record<string, unknown>>(
+    `/settings/${encodeURIComponent(id)}`,
+  )
+  if (!result.ok || !result.data || typeof result.data !== "object") return null
+  return asRecord(result.data)
 }
 
 export type SubscriptionPlanSettings = {
@@ -112,10 +98,6 @@ function parseChapaBlock(raw: Record<string, unknown> | null): ChapaPaymentSetti
   }
 }
 
-/**
- * Overlay flavor-specific fields (matches Flutter ChapaPaymentSettings.overlay).
- * Secrets are never copied from [defaults] unless inheritKeys is true.
- */
 function overlayChapa(
   defaults: ChapaPaymentSettings,
   raw: Record<string, unknown>,
@@ -167,11 +149,6 @@ export type ResolvedChapaConfig = ChapaPaymentSettings & {
   source: "app_settings" | "env"
 }
 
-/**
- * Production Chapa keys from admin `app_settings` id=payment.
- * Same resolution as Flutter production flavor:
- * chapaProduction ?? chapa.production (overlay) ?? legacy chapa.
- */
 export async function fetchProductionChapaConfig(): Promise<ResolvedChapaConfig | null> {
   const envSecret = process.env.CHAPA_SECRET_KEY?.trim() ?? ""
   const envPublic = process.env.CHAPA_PUBLIC_KEY?.trim() ?? ""
@@ -198,17 +175,6 @@ export async function fetchProductionChapaConfig(): Promise<ResolvedChapaConfig 
     if (production && isUsable(production)) {
       return { ...production, source: "app_settings" }
     }
-
-    // Keys present but toggled off / incomplete — try env fallback below.
-    if (production && (production.publicKey || production.secretKey)) {
-      console.warn(
-        "[app-settings] payment.chapa found but not usable (enable/isActive/keys).",
-      )
-    }
-  } else if (!getServiceSupabase()) {
-    console.warn(
-      "[app-settings] SUPABASE_SERVICE_ROLE_KEY missing — cannot read payment settings reliably.",
-    )
   }
 
   if (envSecret && envPublic && !envSecret.includes("your-") && !envPublic.includes("your-")) {

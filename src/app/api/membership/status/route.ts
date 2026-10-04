@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server"
 
-import {
-  bearerToken,
-  isUuid,
-  supabaseWithToken,
-} from "@/lib/membership"
+import { authMe, bearerToken, isUuid } from "@/lib/membership"
+import { backendFetch } from "@/lib/backend"
 
 export async function GET(request: Request) {
   const token = bearerToken(request)
@@ -18,28 +15,26 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Invalid user id." }, { status: 400 })
   }
 
-  const supabase = supabaseWithToken(token)
-  if (!supabase) {
-    return NextResponse.json({ error: "Service unavailable." }, { status: 503 })
-  }
-
-  const { data: userData, error: userError } = await supabase.auth.getUser()
-  if (userError || !userData.user || userData.user.id !== userId) {
+  const me = await authMe(token)
+  if (!me || me.id !== userId) {
     return NextResponse.json({ error: "Session does not match account." }, { status: 403 })
   }
 
-  const { data, error } = await supabase
-    .from("app_subscriptions")
-    .select("id, status, ends_at, starts_at")
-    .eq("patient_id", userId)
-    .order("ends_at", { ascending: false })
-    .limit(1)
-    .maybeSingle()
+  const sub = await backendFetch<{
+    id?: string
+    status?: string
+    ends_at?: string
+    starts_at?: string
+  } | null>("/subscriptions/app", { token })
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  if (!sub.ok) {
+    return NextResponse.json(
+      { error: sub.message || "Could not load membership." },
+      { status: sub.status >= 400 ? sub.status : 500 },
+    )
   }
 
+  const data = sub.data
   const endsAt = data?.ends_at ? new Date(data.ends_at) : null
   const active =
     data?.status === "active" && endsAt != null && endsAt.getTime() > Date.now()

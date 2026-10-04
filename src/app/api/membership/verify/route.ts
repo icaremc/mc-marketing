@@ -1,40 +1,18 @@
 import { NextResponse } from "next/server"
 
+import { backendFetch } from "@/lib/backend"
+import { verifyChapaPayment } from "@/lib/chapa"
 import {
+  authMe,
   bearerToken,
   fetchChapaConfig,
-  fetchMembershipPlan,
   isUuid,
-  supabaseWithToken,
 } from "@/lib/membership"
 
 export const maxDuration = 30
 
-async function verifyChapa(txRef: string, secretKey: string): Promise<{
-  ok: boolean
-  amountPaid: number
-}> {
-  const response = await fetch(
-    `https://api.chapa.co/v1/transaction/verify/${encodeURIComponent(txRef)}`,
-    {
-      headers: {
-        Authorization: `Bearer ${secretKey}`,
-        "Content-Type": "application/json",
-      },
-    },
-  )
-  if (!response.ok) return { ok: false, amountPaid: 0 }
-  const payload = (await response.json()) as {
-    status?: string
-    data?: { status?: string; amount?: number | string }
-  }
-  if (payload.status !== "success" || payload.data?.status !== "success") {
-    return { ok: false, amountPaid: 0 }
-  }
-  const raw = payload.data.amount
-  const amountPaid =
-    typeof raw === "number" ? raw : Number.parseFloat(String(raw ?? "")) || 0
-  return { ok: true, amountPaid }
+async function sleep(ms: number) {
+  await new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export async function POST(request: Request) {
@@ -56,14 +34,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid payment details." }, { status: 400 })
   }
 
-  const supabase = supabaseWithToken(token)
-  if (!supabase) {
-    return NextResponse.json({ error: "Service unavailable." }, { status: 503 })
+  const me = await authMe(token)
+  if (!me || me.id !== userId) {
+    return NextResponse.json({ error: "Session does not match account." }, { status: 403 })
   }
 
-  const { data: userData, error: userError } = await supabase.auth.getUser()
-  if (userError || !userData.user || userData.user.id !== userId) {
-    return NextResponse.json({ error: "Session does not match account." }, { status: 403 })
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const sub = await backendFetch<{ id?: string; status?: string } | null>(
+      "/subscriptions/app",
+      { token },
+    )
+    if (sub.ok && sub.data && sub.data.status === "active") {
+      return NextResponse.json({
+        ok: true,
+        subscriptionId: sub.data.id ?? null,
+        endsHint: true,
+      })
+    }
+    if (attempt < 3) await sleep(800)
   }
 
   const chapa = await fetchChapaConfig()
@@ -71,7 +59,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Payment not configured." }, { status: 503 })
   }
 
-  const verified = await verifyChapa(txRef, chapa.secretKey)
+  const verified = await verifyChapaPayment({
+    secretKey: chapa.secretKey,
+    txRef,
+  })
   if (!verified.ok) {
     return NextResponse.json(
       { error: "Payment not completed yet. Wait a moment and try again." },
@@ -79,28 +70,33 @@ export async function POST(request: Request) {
     )
   }
 
-  const plan = await fetchMembershipPlan()
-  // RPC requires at least the yearly plan amount (gateway fee may be included).
-  const amountForRpc = Math.max(verified.amountPaid, plan.yearlyPrice)
-
-  const { data, error } = await supabase.rpc("activate_app_subscription", {
-    p_tx_ref: txRef,
-    p_amount_paid: amountForRpc,
-    p_payment_method: "chapa",
+  // ponytail: activate via webhook handler when Chapa→BE webhook is slow/missing
+  await backendFetch("/payments/chapa/webhook", {
+    method: "POST",
+    json: {
+      tx_ref: txRef,
+      status: "success",
+      amount: String(verified.amount),
+      meta: { kind: "app_subscription", user_id: userId },
+    },
   })
 
-  if (error) {
-    return NextResponse.json(
-      { error: error.message || "Could not activate membership." },
-      { status: 500 },
-    )
+  const sub = await backendFetch<{ id?: string; status?: string } | null>(
+    "/subscriptions/app",
+    { token },
+  )
+  if (sub.ok && sub.data && sub.data.status === "active") {
+    return NextResponse.json({
+      ok: true,
+      subscriptionId: sub.data.id ?? null,
+      endsHint: true,
+    })
   }
 
-  return NextResponse.json({
-    ok: true,
-    subscriptionId: data,
-    endsHint: true,
-  })
+  return NextResponse.json(
+    { error: "Could not activate membership." },
+    { status: 500 },
+  )
 }
 
 /** Chapa may POST callbacks without a user bearer token — acknowledge only. */

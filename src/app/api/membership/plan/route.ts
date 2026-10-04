@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
 import { checkoutTotal, fetchMembershipPlan, gatewayFee } from "@/lib/membership"
-import { getServiceSupabase, isSupabaseConfigured } from "@/lib/supabase"
+import { isBackendConfigured } from "@/lib/backend"
 
 export async function GET() {
   const plan = await fetchMembershipPlan()
@@ -17,9 +17,7 @@ export async function GET() {
     feeAmount,
     total,
     source: plan.source,
-    // Ops hints only — never expose secret keys.
-    supabaseConfigured: isSupabaseConfigured(),
-    serviceRoleConfigured: Boolean(getServiceSupabase()),
+    backendConfigured: isBackendConfigured(),
     paymentConfigured: plan.source.chapa !== "none",
   })
 }
