@@ -66,6 +66,6 @@ export async function POST(request: Request) {
     )
   }
 
-  await setSessionCookies(sessionFromTokenOut(result.data))
-  return NextResponse.json({ ok: true })
+  await setSessionCookies(sessionFromTokenOut(result.data, "patient"))
+  return NextResponse.json({ ok: true, role: "patient" })
 }

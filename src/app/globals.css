@@ -136,3 +136,129 @@
     @apply font-heading tracking-normal;
   }
 }
+
+/* Mobile app shells — Flutter AppColors light / dark */
+@layer utilities {
+  .app-shell {
+    --app-nav-height: 4rem;
+    --app-top-bar-height: 3rem;
+    --app-safe-top: env(safe-area-inset-top, 0px);
+    --app-safe-bottom: env(safe-area-inset-bottom, 0px);
+    --app-frame-max: 28rem;
+    /* Light (AppColors) */
+    --background: #e8ebed;
+    --foreground: #1e2d32;
+    --card: #ffffff;
+    --card-foreground: #1e2d32;
+    --popover: #ffffff;
+    --popover-foreground: #1e2d32;
+    --primary: #4dad88;
+    --primary-foreground: #ffffff;
+    --secondary: #e2e5e8;
+    --secondary-foreground: #1e2d32;
+    --muted: #e2e5e8;
+    --muted-foreground: #5a6b73;
+    --accent: #e9f9f3;
+    --accent-foreground: #1e2d32;
+    --destructive: #e05d5d;
+    --border: rgba(0, 0, 0, 0.04);
+    --input: #e2e5e8;
+    --ring: #4dad88;
+    --icare-primary-dark: #3b9472;
+    --icare-chrome: color-mix(in srgb, #4dad88 97%, white);
+    --icare-header-bg: #ffffff;
+    --icare-header-fg: #1e2d32;
+    --icare-brand: #4dad88;
+    --icare-nav-active: #4dad88;
+    --icare-nav-inactive: #5a6b73;
+    /* Flutter HomeStyle.cardBackground(warning/danger) */
+    --icare-warning-card: color-mix(in srgb, #ff9900 7%, #ffffff);
+    --icare-danger-card: color-mix(in srgb, #e05d5d 8%, #ffffff);
+    --icare-warning-inset: color-mix(in srgb, #ff9900 14%, #ffffff);
+    --icare-surface-muted: #e2e5e8;
+    --icare-warning: #ff9900;
+    --icare-status-gradient: linear-gradient(
+      135deg,
+      #2f7f62 0%,
+      #4dad88 45%,
+      #73c1a3 100%
+    );
+    --icare-center-fab-bg: #4dad88;
+    --icare-center-fab-fg: #ffffff;
+    --icare-center-fab-active-bg: #ffffff;
+    --icare-center-fab-active-fg: #4dad88;
+    color: var(--foreground);
+    background: var(--background);
+  }
+
+  html.dark .app-shell {
+    --background: #12181a;
+    --foreground: #e8f0f2;
+    --card: #1c2428;
+    --card-foreground: #e8f0f2;
+    --popover: #1c2428;
+    --popover-foreground: #e8f0f2;
+    --primary: #4dad88;
+    --primary-foreground: #ffffff;
+    --secondary: #243038;
+    --secondary-foreground: #e8f0f2;
+    --muted: #243038;
+    --muted-foreground: #a8b8c0;
+    --accent: #243038;
+    --accent-foreground: #e8f0f2;
+    --destructive: #e05d5d;
+    --border: #2e3a40;
+    --input: #2e3a40;
+    --ring: #4dad88;
+    --icare-chrome: #1a3d32;
+    --icare-header-bg: var(--icare-chrome);
+    --icare-header-fg: #ffffff;
+    --icare-brand: #ffffff;
+    --icare-nav-active: #ffffff;
+    --icare-nav-inactive: #9aa5ab;
+    --icare-surface-muted: #243038;
+    --icare-warning-card: color-mix(in srgb, #ff9900 14%, #1c2428);
+    --icare-danger-card: color-mix(in srgb, #e05d5d 10%, #1c2428);
+    --icare-warning-inset: color-mix(in srgb, #ff9900 22%, #1c2428);
+    --icare-status-gradient: linear-gradient(
+      135deg,
+      #235b48 0%,
+      #17604e 45%,
+      #123a30 100%
+    );
+    /* Dark chrome: elevated center stays white (ConvexAppBar screenshot). */
+    --icare-center-fab-bg: #ffffff;
+    --icare-center-fab-fg: #4dad88;
+    --icare-center-fab-active-bg: #ffffff;
+    --icare-center-fab-active-fg: #4dad88;
+  }
+
+  .app-shell-stage {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .app-shell {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  .app-scroll {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    overscroll-behavior-y: contain;
+  }
+
+  /* FAB aligned to phone frame, above bottom nav + home indicator */
+  .app-fab {
+    position: absolute;
+    right: 1rem;
+    bottom: calc(var(--app-nav-height) + var(--app-safe-bottom) + 0.75rem);
+    z-index: 30;
+  }
+
+  .app-bottom-nav {
+    min-height: var(--app-nav-height);
+  }
+}

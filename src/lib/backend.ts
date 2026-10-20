@@ -1,3 +1,9 @@
+import {
+  normalizeRoles,
+  pickActiveRole,
+  type AppRole,
+} from "@/lib/auth/roles"
+
 const DEFAULT_API_BASE = "https://api.icaremchealth.com"
 
 export function backendBaseUrl(): string {
@@ -96,15 +102,26 @@ export type TokenOut = {
   ok?: boolean
   access_token: string
   refresh_token: string
+  token_type?: string
   user_id?: string
   role?: string | null
+  roles?: string[] | null
+  admin_role?: string | null
 }
 
-export function sessionFromTokenOut(tokens: TokenOut) {
+export function sessionFromTokenOut(
+  tokens: TokenOut,
+  preferredRole?: AppRole | null,
+) {
+  const roles = normalizeRoles({ role: tokens.role, roles: tokens.roles })
+  const role = pickActiveRole(roles, preferredRole ?? tokens.role ?? null)
   return {
     accessToken: tokens.access_token,
     refreshToken: tokens.refresh_token,
     // ponytail: TokenOut has no expires_at; cookie maxAge follows JWT access (~60m)
     expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
+    role,
+    roles,
+    userId: tokens.user_id ?? null,
   }
 }

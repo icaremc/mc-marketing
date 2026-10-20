@@ -1,14 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
-export function LoginForm({ redirectTo = "/subscribe" }: { redirectTo?: string }) {
+export function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const next = redirectTo || searchParams.get("next") || "/app"
   const [phone, setPhone] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -30,7 +32,9 @@ export function LoginForm({ redirectTo = "/subscribe" }: { redirectTo?: string }
         setError(data.error ?? "Could not sign in.")
         return
       }
-      router.push(redirectTo)
+      const target =
+        next.startsWith("/app") || next.startsWith("/subscribe") ? next : "/app"
+      router.push(target)
       router.refresh()
     } catch {
       setError("Something went wrong. Please try again.")

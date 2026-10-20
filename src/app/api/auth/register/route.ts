@@ -91,11 +91,12 @@ export async function POST(request: Request) {
     )
   }
 
-  await setSessionCookies(sessionFromTokenOut(result.data))
+  await setSessionCookies(sessionFromTokenOut(result.data, "patient"))
   await clearPhoneVerifiedCookie()
 
   return NextResponse.json({
     ok: true,
+    role: "patient",
     user: {
       id: result.data.user_id,
       fullName,

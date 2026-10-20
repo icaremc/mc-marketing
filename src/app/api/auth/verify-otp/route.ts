@@ -30,7 +30,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid phone number." }, { status: 400 })
   }
   if (!/^\d{4,8}$/.test(code)) {
-    return NextResponse.json({ error: "Enter the verification code." }, { status: 400 })
+    return NextResponse.json(
+      { error: "Enter the 6-digit verification code." },
+      { status: 400 },
+    )
   }
 
   // ponytail: backend has no OTP-verify-only route; real check happens on signup

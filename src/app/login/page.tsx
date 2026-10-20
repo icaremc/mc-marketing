@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 
 import { LoginForm } from "@/components/login-form"
 import { SiteFooter } from "@/components/site-footer"
@@ -7,7 +8,7 @@ import { siteConfig } from "@/lib/brand"
 
 export const metadata: Metadata = {
   title: "Sign in",
-  description: `Sign in to your ${siteConfig.name} account to manage subscription.`,
+  description: `Sign in to your ${siteConfig.name} account.`,
   alternates: { canonical: "/login" },
 }
 
@@ -26,7 +27,9 @@ export default function LoginPage() {
           </p>
         </div>
         <div className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
-          <LoginForm />
+          <Suspense fallback={<p className="text-sm text-muted-foreground">Loading…</p>}>
+            <LoginForm />
+          </Suspense>
         </div>
       </main>
       <SiteFooter />

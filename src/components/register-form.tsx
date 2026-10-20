@@ -280,7 +280,9 @@ export function RegisterForm() {
               value={otp}
               onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 8))}
               className={fieldClass}
-              placeholder="4-digit code"
+              placeholder="6-digit code"
+              maxLength={6}
+              pattern="[0-9]{6}"
             />
           </div>
 
