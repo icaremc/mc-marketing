@@ -15,11 +15,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { siteConfig } from "@/lib/brand"
-import { ACTIVATION_TOKEN_KEY } from "@/lib/membership"
+import { ACTIVATION_TOKEN_KEY, CHAPA_TX_REF_KEY } from "@/lib/membership"
 
 export function ActivateSuccessClient() {
   const params = useSearchParams()
-  const txRef = params.get("tx_ref")?.trim() ?? ""
   const userId = params.get("user_id")?.trim() ?? ""
   const [status, setStatus] = React.useState<"working" | "ok" | "error">(
     "working",
@@ -30,6 +29,11 @@ export function ActivateSuccessClient() {
     let cancelled = false
     async function finalize() {
       const token = sessionStorage.getItem(ACTIVATION_TOKEN_KEY)
+      const txRef =
+        params.get("tx_ref")?.trim() ||
+        params.get("trx_ref")?.trim() ||
+        sessionStorage.getItem(CHAPA_TX_REF_KEY)?.trim() ||
+        ""
       if (!token || !txRef || !userId) {
         if (!cancelled) {
           setStatus("error")
@@ -52,6 +56,11 @@ export function ActivateSuccessClient() {
         const data = (await response.json()) as { error?: string; ok?: boolean }
         if (!cancelled) {
           if (response.ok && data.ok) {
+            try {
+              sessionStorage.removeItem(CHAPA_TX_REF_KEY)
+            } catch {
+              /* ignore */
+            }
             setStatus("ok")
             setMessage(
               "Membership is active. Open the ICare MC app and sign in with your phone and password.",
@@ -77,7 +86,7 @@ export function ActivateSuccessClient() {
     return () => {
       cancelled = true
     }
-  }, [txRef, userId])
+  }, [params, userId])
 
   return (
     <Card>

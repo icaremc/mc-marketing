@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { ACTIVATION_TOKEN_KEY } from "@/lib/membership"
+import { ACTIVATION_TOKEN_KEY, CHAPA_TX_REF_KEY } from "@/lib/membership"
 import { siteConfig } from "@/lib/brand"
 
 type ActivationCheckoutProps = {
@@ -162,10 +162,14 @@ export function ActivationCheckout({
       const data = (await response.json()) as {
         error?: string
         checkoutUrl?: string
+        txRef?: string
       }
       if (!response.ok || !data.checkoutUrl) {
         setError(data.error || "Could not start checkout.")
         return
+      }
+      if (data.txRef?.trim()) {
+        sessionStorage.setItem(CHAPA_TX_REF_KEY, data.txRef.trim())
       }
       window.location.href = data.checkoutUrl
     } catch {

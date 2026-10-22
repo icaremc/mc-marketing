@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
+import { CHAPA_TX_REF_KEY } from "@/lib/membership"
 
 type SubscribeCheckoutProps = {
   yearlyPrice: number
@@ -33,10 +34,14 @@ export function SubscribeCheckout({
       const data = (await response.json()) as {
         error?: string
         checkoutUrl?: string
+        txRef?: string
       }
       if (!response.ok || !data.checkoutUrl) {
         setError(data.error ?? "Could not start payment.")
         return
+      }
+      if (data.txRef?.trim()) {
+        sessionStorage.setItem(CHAPA_TX_REF_KEY, data.txRef.trim())
       }
       window.location.href = data.checkoutUrl
     } catch {

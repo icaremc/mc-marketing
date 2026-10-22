@@ -6,14 +6,28 @@ import { useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { StoreBadges } from "@/components/store-badges"
+import { CHAPA_TX_REF_KEY } from "@/lib/membership"
+
+function resolveTxRef(searchParams: URLSearchParams): string {
+  const fromUrl =
+    searchParams.get("tx_ref")?.trim() ||
+    searchParams.get("trx_ref")?.trim() ||
+    ""
+  if (fromUrl) return fromUrl
+  try {
+    return sessionStorage.getItem(CHAPA_TX_REF_KEY)?.trim() ?? ""
+  } catch {
+    return ""
+  }
+}
 
 export function SubscribeCallbackClient() {
   const searchParams = useSearchParams()
-  const txRef = searchParams.get("tx_ref") ?? searchParams.get("trx_ref") ?? ""
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
   const [message, setMessage] = useState("Confirming your payment…")
 
   useEffect(() => {
+    const txRef = resolveTxRef(searchParams)
     if (!txRef) {
       setStatus("error")
       setMessage("Missing payment reference.")
@@ -32,12 +46,22 @@ export function SubscribeCallbackClient() {
         const data = (await response.json()) as { error?: string; ok?: boolean }
         if (cancelled) return
         if (response.ok && data.ok) {
+          try {
+            sessionStorage.removeItem(CHAPA_TX_REF_KEY)
+          } catch {
+            /* ignore */
+          }
           setStatus("success")
           setMessage("Your yearly membership is active.")
           return
         }
         // 202: Chapa paid, backend webhook still catching up
         if (response.status === 202) {
+          try {
+            sessionStorage.removeItem(CHAPA_TX_REF_KEY)
+          } catch {
+            /* ignore */
+          }
           setStatus("success")
           setMessage(
             data.error ??
@@ -58,7 +82,7 @@ export function SubscribeCallbackClient() {
     return () => {
       cancelled = true
     }
-  }, [txRef])
+  }, [searchParams])
 
   return (
     <div className="flex flex-col gap-5">

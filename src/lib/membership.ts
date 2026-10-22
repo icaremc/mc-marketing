@@ -10,6 +10,8 @@ import {
 } from "@/lib/app-settings"
 
 export const ACTIVATION_TOKEN_KEY = "icare_mc_activation_token"
+/** Stashed before Chapa redirect when return URL may omit tx_ref. */
+export const CHAPA_TX_REF_KEY = "icare_mc_chapa_tx_ref"
 
 export {
   checkoutTotal,
